@@ -87,7 +87,7 @@ public class UndirectedGraph {
         }
         VertexNode vertexNodeA = getVertex(inOrder[0]);
         VertexNode vertexNodeB = getVertex(inOrder[1]);
-        //addEdgeToVertexEdgeList0(vertexNodeA,vertexNodeB,0);
+        addEdgeToVertexEdgeList0(vertexNodeA,vertexNodeB);
         addEdgeToVertexEdgeList1(vertexNodeB,vertexNodeA);
     }
 
@@ -98,10 +98,23 @@ public class UndirectedGraph {
             return;
         }
         EdgeNode curEdge = vertexNodeA.edges[1];
-        while(curEdge.nextE[1] != null && curEdge.nextE[1].edge[1].vertexName.compareTo(vertexNodeA.vertexName.toLowerCase()) < 0) {
+        while(curEdge.nextE[1] != null && curEdge.nextE[1].edge[1].vertexName.toLowerCase().compareTo(vertexNodeA.vertexName.toLowerCase()) < 0) {
             curEdge = curEdge.nextE[1];
         }
         curEdge.nextE[1] = new EdgeNode(vertexNodeA,vertexNodeB);
+    }
+
+    private void addEdgeToVertexEdgeList0(VertexNode vertexNodeA, VertexNode vertexNodeB) {
+        if(vertexNodeA.edges[0] == null) { vertexNodeA.edges[0] = new EdgeNode(vertexNodeB,vertexNodeA); return; }
+        if(vertices.vertexName.toLowerCase().compareTo(vertexNodeA.vertexName.toLowerCase()) > 0) {
+            vertexNodeA.edges[0].nextE[0] = new EdgeNode(vertexNodeB,vertexNodeA);
+            return;
+        }
+        EdgeNode curEdge = vertexNodeA.edges[0];
+        while(curEdge.nextE[0] != null && curEdge.nextE[0].edge[0].vertexName.compareTo(vertexNodeA.vertexName.toLowerCase()) > 0) {
+            curEdge = curEdge.nextE[0];
+        }
+        curEdge.nextE[0] = new EdgeNode(vertexNodeB,vertexNodeA);
     }
 
     public void printGraph() {
