@@ -111,7 +111,7 @@ public class UndirectedGraph {
             return;
         }
         EdgeNode curEdge = vertexNodeA.edges[0];
-        while(curEdge.nextE[0] != null && curEdge.nextE[0].edge[0].vertexName.compareTo(vertexNodeA.vertexName.toLowerCase()) > 0) {
+        while(curEdge.nextE[0] != null && curEdge.nextE[0].edge[0].vertexName.toLowerCase().compareTo(vertexNodeA.vertexName.toLowerCase()) > 0) {
             curEdge = curEdge.nextE[0];
         }
         curEdge.nextE[0] = new EdgeNode(vertexNodeB,vertexNodeA);
