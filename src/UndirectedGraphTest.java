@@ -43,7 +43,9 @@ public class UndirectedGraphTest {
         UndirectedGraph graph = new UndirectedGraph();
         graph.addVertex("E");
         graph.addVertex("A");
+        graph.addVertex("B");
         graph.addEdge("E", "A");
+        graph.addEdge("A","B");
         String result = "E\n ";
         Assert.assertEquals(result,graph.oneNodeVertexListToString("A"));
     }
