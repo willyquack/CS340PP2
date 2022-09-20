@@ -1,3 +1,8 @@
+/*
+CS340 Programming project 2
+Will Quackenbush
+ */
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -55,16 +60,6 @@ public class UndirectedGraph {
         return false;
     }
 
-    public String vertexListToString() {
-        VertexNode curNode = vertices;
-        StringBuilder result = new StringBuilder();
-        while(curNode != null) {
-            result.append(curNode.vertexName).append(" ");
-            curNode = curNode.nextV;
-        }
-        return result.toString();
-    }
-
     private VertexNode getVertex(String vertexName) {
         VertexNode curNode = vertices;
         while(curNode != null) {
@@ -86,37 +81,24 @@ public class UndirectedGraph {
             inOrder[1] = v1;
         }
         EdgeNode toAdd = new EdgeNode(getVertex(inOrder[0]),getVertex(inOrder[1]));
-        addEdgeToVertexEdgeList0(toAdd);
-        addEdgeToVertexEdgeList1(toAdd);
+        addEdgeToVertexEdgeList(toAdd, 0);
+        addEdgeToVertexEdgeList(toAdd, 1);
     }
 
-    private void addEdgeToVertexEdgeList0(EdgeNode eNode) {
-        VertexNode vNode = eNode.edge[0];
-        if(vNode.edges[0] == null || vNode.edges[0].edge[1].vertexName.compareTo(eNode.edge[1].vertexName) > 0) {
-            eNode.nextE[0] = vNode.edges[0];
-            vNode.edges[0] = eNode;
+    private void addEdgeToVertexEdgeList(EdgeNode eNode, int edgeNum) {
+        int edgeNumInv = Math.abs(edgeNum - 1);
+        VertexNode vNode = eNode.edge[edgeNum];
+        if(vNode.edges[edgeNum] == null || vNode.edges[edgeNum].edge[edgeNumInv].vertexName.compareTo(eNode.edge[edgeNumInv].vertexName) > 0) {
+            eNode.nextE[edgeNum] = vNode.edges[edgeNum];
+            vNode.edges[edgeNum] = eNode;
             return;
         }
-        EdgeNode curEdge = vNode.edges[0];
-        while(curEdge.nextE[0] != null && curEdge.nextE[0].edge[1].vertexName.compareTo(eNode.edge[1].vertexName) < 0) {
-            curEdge = curEdge.nextE[0];
+        EdgeNode curEdge = vNode.edges[edgeNum];
+        while(curEdge.nextE[edgeNum] != null && curEdge.nextE[edgeNum].edge[edgeNumInv].vertexName.compareTo(eNode.edge[edgeNumInv].vertexName) < 0) {
+            curEdge = curEdge.nextE[edgeNum];
         }
-        eNode.nextE[0] = curEdge.nextE[0];
-        curEdge.nextE[0] = eNode;
-    }
-    private void addEdgeToVertexEdgeList1(EdgeNode eNode) {
-        VertexNode vNode = eNode.edge[1];
-        if(vNode.edges[1] == null || vNode.edges[1].edge[0].vertexName.compareTo(eNode.edge[0].vertexName) > 0) {
-            eNode.nextE[1] = vNode.edges[1];
-            vNode.edges[1] = eNode;
-            return;
-        }
-        EdgeNode curEdge = vNode.edges[1];
-        while(curEdge.nextE[1] != null && curEdge.nextE[1].edge[0].vertexName.compareTo(eNode.edge[0].vertexName) < 0) {
-            curEdge = curEdge.nextE[1];
-        }
-        eNode.nextE[1] = curEdge.nextE[1];
-        curEdge.nextE[1] = eNode;
+        eNode.nextE[edgeNum] = curEdge.nextE[edgeNum];
+        curEdge.nextE[edgeNum] = eNode;
     }
 
     public void printGraph() {
@@ -127,39 +109,19 @@ public class UndirectedGraph {
             result.append(curVertex.vertexName).append(" ");
             curEdge = curVertex.edges[0];
             while(curEdge != null) {
-                result.append(curEdge.edge[1].vertexName + " ");
+                result.append(curEdge.edge[1].vertexName).append(" ");
                 curEdge = curEdge.nextE[0];
             }
             result.append("\n  ");
             curEdge = curVertex.edges[1];
             while(curEdge != null) {
-                result.append(curEdge.edge[0].vertexName + " ");
+                result.append(curEdge.edge[0].vertexName).append(" ");
                 curEdge = curEdge.nextE[1];
             }
             result.append("\n");
             curVertex = curVertex.nextV;
         }
         System.out.println(result.toString());
-    }
-
-    public String oneNodeVertexListToString(String vertexName) {
-        VertexNode curNode = vertices;
-        while(curNode != null && !curNode.vertexName.equals(vertexName)) {
-            curNode = curNode.nextV;
-        }
-        StringBuilder result = new StringBuilder();
-        EdgeNode curEdge = curNode.edges[0];
-        while(curEdge != null) {
-            result.append(curEdge.edge[0].vertexName + " ");
-            curEdge = curEdge.nextE[0];
-        }
-        curEdge = curNode.edges[1];
-        result.append("\n");
-        while(curEdge != null) {
-            result.append(curEdge.edge[1].vertexName + " ");
-            curEdge = curEdge.nextE[1];
-        }
-        return result.toString();
     }
 
     private class EdgeNode {
